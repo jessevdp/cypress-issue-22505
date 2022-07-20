@@ -1,6 +1,7 @@
-const { defineConfig } = require("cypress");
+import { devServer } from '@cypress/vite-dev-server'
+import { defineConfig } from 'cypress'
 
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
       // implement node event listeners here
@@ -8,9 +9,12 @@ module.exports = defineConfig({
   },
 
   component: {
-    devServer: {
-      framework: "react",
-      bundler: "vite",
+    devServer(devServerConfig) {
+      return devServer({
+        ...devServerConfig,
+        framework: 'react',
+        viteConfig: import('./vite.cypress.config.js')
+      })
     },
     specPattern: "cypress/component/**/*.cy.{js,jsx,ts,tsx}",
   },
